@@ -7,8 +7,9 @@
 
 /*
  * :::::How to run with arguments:::::
- * argv[1]=="-L%i", where %i is the size of the linked hashtable (should never be negative)
+ * argv[1]=="-L%i", where %i is the size of the linked hashtable (should always be a natural number)
  * argv[2]=="-D", DEBUGMODE: prints the linked hash table with the teams before printing the sorted order
+ * Must come in correct order. 
  */
 
 /*
