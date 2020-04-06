@@ -4,7 +4,7 @@ const rl = require('readline');
 const fs = require('fs');
 
 /* 
- * Functions:
+ * TODO Functions:
  * Read entire file to a string.
  * Read nth line of a file.
  * Read from start to end.
