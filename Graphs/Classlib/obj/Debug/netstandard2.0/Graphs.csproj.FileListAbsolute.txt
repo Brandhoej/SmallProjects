@@ -1,0 +1,18 @@
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\bin\Debug\netstandard2.0\Graphs.deps.json
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\bin\Debug\netstandard2.0\Graphs.dll
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\bin\Debug\netstandard2.0\Graphs.pdb
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.csprojAssemblyReference.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.csproj.CoreCompileInputs.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.AssemblyInfoInputs.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.AssemblyInfo.cs
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.dll
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Class library\obj\Debug\netstandard2.0\Graphs.pdb
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\bin\Debug\netstandard2.0\Graphs.deps.json
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\bin\Debug\netstandard2.0\Graphs.dll
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\bin\Debug\netstandard2.0\Graphs.pdb
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.csprojAssemblyReference.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.csproj.CoreCompileInputs.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.AssemblyInfoInputs.cache
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.AssemblyInfo.cs
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.dll
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Classlib\obj\Debug\netstandard2.0\Graphs.pdb
