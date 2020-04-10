@@ -17,5 +17,5 @@ Personal exploration of recursive sudoku solving using backtracking, bottom-up, 
 ## Yatzy (C)
 A simepl Yatzy game simulation where the aount of rolls can be altered by input and the amount of sides on a die can be altered.
 
-## Graphs (C#)
+## Graphs (C#, WIP)
 A comprehensive graph library.
