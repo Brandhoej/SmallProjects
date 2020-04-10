@@ -18,6 +18,6 @@ Personal exploration of recursive sudoku solving using backtracking, bottom-up, 
 A simepl Yatzy game simulation where the aount of rolls can be altered by input and the amount of sides on a die can be altered.
 
 ## Graphs (C#, WIP)
-A comprehensive graph library (`Null graph`*, `trivial graph`*, `non-directed graph`*, `directed graph`*, `simple graph`*, `connected graph`*, `disconnected graph`*, `regular graph`*, `complete graph`*, `wheel graph`*, `cyclic graph`*, `acyclic graph`*, `bipartite graph`*, `complete bipartite graph`*, `star grap`* and `complement graph`*). 
+A comprehensive graph library (`Null graph*`, `trivial graph*`, `non-directed graph*`, `directed graph*`, `simple graph*`, `connected graph*`, `disconnected graph*`, `regular graph*`, `complete graph*`, `wheel graph*`, `cyclic graph*`, `acyclic graph*`, `bipartite graph*`, `complete bipartite graph*`, `star grap*` and `complement graph*`). 
 
 (*) TODO
