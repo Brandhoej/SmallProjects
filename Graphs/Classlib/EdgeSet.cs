@@ -1,42 +1,44 @@
 namespace Graphs {
-    public interface IEdgeSet<TVertex, TEdge>
-        : IReadonlyEdgeSet<TVertex, TEdge>, IMutableEdgeSet<TVertex, TEdge>,
-        where TVertex : IVertex 
-        where TEdge : IEdge<TVertex> {
-        IVertexSet<TVertex> VertexSet
+    public interface IEdgeSet<TVertexKey, TVertex, TEdge>
+        : IReadonlyEdgeSet<TVertexKey, TVertex, TEdge>,
+        IMutableEdgeSet<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : IReadonlyEdge<TVertex> {
+        IVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
     }
 
-    public interface IReadonlyEdgeSet<TVertex, TEdge>
-        where TVertex : IVertex 
-        where TEdge : IEdge<TVertex> {    }
-
-    public interface IMutableEdgeSet<TVertex, TEdge>
-        where TVertex : IVertex 
-        where TEdge : IEdge<TVertex> {    }
-
-    public class EdgeSet<TVertex, TEdge>
-        : IEdgeSet<TVertex, TEdge>
+    public interface IReadonlyEdgeSet<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex> {
-        public IVertexSet<TVertex> VertexSet
+        where TEdge : IReadonlyEdge<TVertex> {    }
+
+    public interface IMutableEdgeSet<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex 
+        where TEdge : IReadonlyEdge<TVertex> {    }
+
+    public class EdgeSet<TVertexKey, TVertex, TEdge>
+        : IEdgeSet<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : IReadonlyEdge<TVertex> {
+        public IVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
 
-        public EdgeSet(IVertexSet<TVertex> vertexSet) {
+        public EdgeSet(IVertexSet<TVertexKey, TVertex> vertexSet) {
             VertexSet = vertexSet;
         }
     }
 
-    public interface IUndirectedEdgeSet<TVertex, TEdge>
-        : IEdgeSet<TVertex, TEdge>
+    public interface IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>
+        : IEdgeSet<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex> {    }
+        where TEdge : IReadonlyEdge<TVertex> {    }
 
-    public class UndirectedEdgeSet<TVertex, TEdge>
-        : EdgeSet<TVertex, TEdge>, IUndirectedEdgeSet<TVertex, TEdge>
+    public class UndirectedEdgeSet<TVertexKey, TVertex, TEdge>
+        : EdgeSet<TVertexKey, TVertex, TEdge>,
+        IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex> {
-        public UndirectedEdgeSet(IVertexSet<TVertex> vertexSet)
+        where TEdge : IReadonlyEdge<TVertex> {
+        public UndirectedEdgeSet(IVertexSet<TVertexKey, TVertex> vertexSet)
             : base(vertexSet) {    }
     }
 }

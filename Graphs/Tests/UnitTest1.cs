@@ -1,19 +1,18 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Graphs;
-using Graphs.Bla;
-using Graphs.FooBar;
 
 namespace Tests {
     [TestClass]
     public class UnitTest1 {
         [TestMethod]
-        public void TestMethod1() {
-            Class1 test = new Class1(new Class2("FooBar"));
-            Assert.AreEqual(test.Test.Val, "FooBar");
-            Assert.AreEqual(true, true);
-
-            Iron iron = new Iron();
-            Assert.AreEqual(iron.test, true);
+        public void CheckGraphConversionPerperties() {
+            UndirectedGraph<VertexList<Vertex>, int, Vertex, UndirectedEdgeSet<int, Vertex, Edge<Vertex>>, Edge<Vertex>> graph = new UndirectedGraph<VertexList<Vertex>, int, Vertex, UndirectedEdgeSet<int, Vertex, Edge<Vertex>>, Edge<Vertex>>(new VertexList<Vertex>());
+            Assert.IsNotNull(graph.EdgeSet);
+            Assert.IsNotNull(graph.VertexSet);
+            Assert.IsNotNull(((IMutableGraph<int, Vertex, Edge<Vertex>, IVertexSet<int, Vertex>, IUndirectedEdgeSet<int, Vertex, Edge<Vertex>>>)graph).EdgeSet);
+            Assert.IsNotNull(((IMutableGraph<int, Vertex, Edge<Vertex>, IVertexSet<int, Vertex>, IUndirectedEdgeSet<int, Vertex, Edge<Vertex>>>)graph).VertexSet);
+            Assert.IsNotNull(((IReadonlyGraph<int, Vertex, Edge<Vertex>, IVertexSet<int, Vertex>, IUndirectedEdgeSet<int, Vertex, Edge<Vertex>>>)graph).EdgeSet);
+            Assert.IsNotNull(((IReadonlyGraph<int, Vertex, Edge<Vertex>, IVertexSet<int, Vertex>, IUndirectedEdgeSet<int, Vertex, Edge<Vertex>>>)graph).VertexSet);
         }
     }
 }

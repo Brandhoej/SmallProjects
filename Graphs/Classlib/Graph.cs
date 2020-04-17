@@ -1,80 +1,80 @@
 namespace Graphs {
-    public interface IGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
-        : IReadonlyGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
-        , IMutableGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
+    public interface IGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
+        : IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
+        , IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex>
-        where TVertexSet : IVertexSet<TVertex>
-        where TEdgeSet : IEdgeSet<TVertex, TEdge> {
-        TVertexSet VertexSet
+        where TEdge : IReadonlyEdge<TVertex>
+        where TVertexSet : IVertexSet<TVertexKey, TVertex>
+        where TEdgeSet : IEdgeSet<TVertexKey, TVertex, TEdge> {
+        new TVertexSet VertexSet
         { get; }
-        TEdgeSet EdgeSet
+        new TEdgeSet EdgeSet
         { get; }
     }
 
-    public interface IReadonlyGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
+    public interface IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex>
-        where TVertexSet : IReadonlyVertexSet<TVertex>
-        where TEdgeSet : IReadonlyEdgeSet<TVertex, TEdge> {
-        IReadonlyVertexSet<TVertex> ReadonlyVertexSet
+        where TEdge : IReadonlyEdge<TVertex>
+        where TVertexSet : IReadonlyVertexSet<TVertexKey, TVertex>
+        where TEdgeSet : IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> {
+        IReadonlyVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
-        IReadonlyEdgeSet<TVertex, TEdge> ReadonlyEdgeSet
+        IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> EdgeSet
         { get; }
     }
 
-    public interface IMutableGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
+    public interface IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex>
-        where TVertexSet : IMutableVertexSet<TVertex>
-        where TEdgeSet : IMutableEdgeSet<TVertex, TEdge> {
-        IMutableVertexSet<TVertex> MutableVertexSet
+        where TEdge : IReadonlyEdge<TVertex>
+        where TVertexSet : IMutableVertexSet<TVertexKey, TVertex>
+        where TEdgeSet : IMutableEdgeSet<TVertexKey, TVertex, TEdge> {
+        IMutableVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
-        IMutableEdgeSet<TVertex, TEdge> MutableEdgeSet
+        IMutableEdgeSet<TVertexKey, TVertex, TEdge> EdgeSet
         { get; }
     }
 
-    public abstract class Graph<TVertex, TEdge, TVertexSet, TEdgeSet>
-        : IGraph<TVertex, TEdge, TVertexSet, TEdgeSet>
+    public abstract class Graph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
+        : IGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex>
-        where TVertexSet : IVertexSet<TVertex>
-        where TEdgeSet : IEdgeSet<TVertex, TEdge>
+        where TEdge : IReadonlyEdge<TVertex>
+        where TVertexSet : IVertexSet<TVertexKey, TVertex>
+        where TEdgeSet : IEdgeSet<TVertexKey, TVertex, TEdge>
     {
-        public TVertexSet VertexSet
-        { get; }
-        public TEdgeSet EdgeSet
-        { get; }
-
-        public IReadonlyVertexSet<TVertex> ReadonlyVertexSet 
-            => VertexSet;
-        public IReadonlyEdgeSet<TVertex, TEdge> ReadonlyEdgeSet 
-            => EdgeSet;
-        public IMutableVertexSet<TVertex> MutableVertexSet 
-            => VertexSet;
-        public IMutableEdgeSet<TVertex, TEdge> MutableEdgeSet 
-            => EdgeSet;
-
         public Graph(TVertexSet vertexSet, TEdgeSet edgeSet) {
             VertexSet = vertexSet;
             EdgeSet = edgeSet;
         }
+
+        public TVertexSet VertexSet
+        { get; private set; }
+
+        public TEdgeSet EdgeSet
+        { get; private set; }
+
+        IReadonlyVertexSet<TVertexKey, TVertex> IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>.VertexSet
+            => VertexSet;
+
+        IMutableVertexSet<TVertexKey, TVertex> IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>.VertexSet
+            => VertexSet;
+
+        IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>.EdgeSet
+            => EdgeSet;
+
+        IMutableEdgeSet<TVertexKey, TVertex, TEdge> IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>.EdgeSet
+            => EdgeSet;
     }
 
-    public class UndirectedGraph<TVertex, TEdge>
-        : Graph<TVertex, TEdge, IVertexSet<TVertex>, IUndirectedEdgeSet<TVertex, TEdge>>
+    public class UndirectedGraph<TVertexSet, TVertexKey, TVertex, TEdgeSet, TEdge>
+        : Graph<TVertexKey, TVertex, TEdge, IVertexSet<TVertexKey, TVertex>, IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>>
         where TVertex : IVertex
-        where TEdge : IEdge<TVertex>
-    {
-        public UndirectedGraph(IVertexSet<TVertex> vertexSet)
-            : base(vertexSet, new UndirectedEdgeSet<TVertex, TEdge>(vertexSet)) {    }
-    }
-}
+        where TEdge : IReadonlyEdge<TVertex>
+        where TVertexSet : IVertexSet<TVertexKey, TVertex>
+        where TEdgeSet : IUndirectedEdgeSet<TVertexKey, TVertex, TEdge> {
+        public UndirectedGraph(TVertexSet vertexSet, TEdgeSet edgeSet)
+            : base(vertexSet, edgeSet) {    }
 
-namespace Graphs {
-    public static class Program {
-        public static void Main() {
-            UndirectedGraph<Vertex, Edge<Vertex>> graph = new UndirectedGraph<Vertex, Edge<Vertex>>(new VertexSet<Vertex>());
-        }
+        public UndirectedGraph(TVertexSet vertexSet)
+            : base(vertexSet, new UndirectedEdgeSet<TVertexKey, TVertex, TEdge>(vertexSet)) {    }
     }
 }

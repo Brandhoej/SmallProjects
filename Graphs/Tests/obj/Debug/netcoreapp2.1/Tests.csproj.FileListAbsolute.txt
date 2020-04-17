@@ -15,3 +15,4 @@ C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Te
 C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Tests\obj\Debug\netcoreapp2.1\Tests.csproj.CopyComplete
 C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Tests\obj\Debug\netcoreapp2.1\Tests.dll
 C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Tests\obj\Debug\netcoreapp2.1\Tests.pdb
+C:\Users\andre\OneDrive - Aalborg Universitet\GitProjekt\SmallProjects\Graphs\Tests\obj\Debug\netcoreapp2.1\Tests.genruntimeconfig.cache

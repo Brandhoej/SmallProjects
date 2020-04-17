@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "INTGyrQJkC0UdfCiHqzhoZrp6xUotE3D0t9icfBOPHnvN/IXDR/bL5vCwu3o/NQJJNIDDSxPF7J84qMjAc+ebQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\andre\\OneDrive - Aalborg Universitet\\GitProjekt\\SmallProjects\\Graphs\\Classlib\\Graphs.csproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

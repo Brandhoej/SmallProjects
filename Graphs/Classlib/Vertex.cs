@@ -7,6 +7,6 @@ namespace Graphs {
         { get; }
     }
 
-    public class Vertex
+    public struct Vertex
         : IVertex {    }
 }

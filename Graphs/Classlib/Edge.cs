@@ -1,17 +1,31 @@
 namespace Graphs {
     public interface IEdge<TVertex>
+        : IReadonlyEdge<TVertex>,
+        IMutableEdge<TVertex>
+        where TVertex : IVertex {    }
+
+    public interface IReadonlyEdge<TVertex>
         where TVertex : IVertex {
         TVertex Source
-        { get; set; }
+        { get; }
 
         TVertex Destination
-        { get; set; }
+        { get; }
     }
 
-    public interface ILabeledEdge<TVertex, TLable>
+    public interface IMutableEdge<TVertex>
+        where TVertex : IVertex {
+        TVertex Source
+        { set; }
+
+        TVertex Destination
+        { set; }
+    }
+
+    public interface ILabeledEdge<TVertex, TLabel>
         : IEdge<TVertex>
         where TVertex : IVertex {
-        TLable Label
+        TLabel Label
         { get; }
     }
 
@@ -23,7 +37,10 @@ namespace Graphs {
         : IEdge<TVertex>
         where TVertex : IVertex
     {
-        public TVertex Source { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public TVertex Destination { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public TVertex Source 
+        { get; set; }
+        
+        public TVertex Destination 
+        { get; set; }
     }
 }
