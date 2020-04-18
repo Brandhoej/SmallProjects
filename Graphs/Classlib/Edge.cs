@@ -42,5 +42,10 @@ namespace Graphs {
         
         public TVertex Destination
         { get; set; }
+
+        public Edge(TVertex source, TVertex destination) {
+            Source = source;
+            Destination = destination;
+        }
     }
 }
