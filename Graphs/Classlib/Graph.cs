@@ -8,6 +8,7 @@ namespace Graphs {
         where TEdgeSet : IEdgeSet<TVertexKey, TVertex, TEdge> {
         new TVertexSet VertexSet
         { get; }
+
         new TEdgeSet EdgeSet
         { get; }
     }
@@ -19,6 +20,7 @@ namespace Graphs {
         where TEdgeSet : IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> {
         IReadonlyVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
+
         IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> EdgeSet
         { get; }
     }
@@ -30,6 +32,7 @@ namespace Graphs {
         where TEdgeSet : IMutableEdgeSet<TVertexKey, TVertex, TEdge> {
         IMutableVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
+
         IMutableEdgeSet<TVertexKey, TVertex, TEdge> EdgeSet
         { get; }
     }

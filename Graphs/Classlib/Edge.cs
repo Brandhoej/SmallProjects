@@ -37,10 +37,10 @@ namespace Graphs {
         : IEdge<TVertex>
         where TVertex : IVertex
     {
-        public TVertex Source 
+        public TVertex Source
         { get; set; }
         
-        public TVertex Destination 
+        public TVertex Destination
         { get; set; }
     }
 }
