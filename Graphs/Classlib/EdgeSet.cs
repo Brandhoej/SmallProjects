@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Graphs {
     public interface IEdgeSet<TVertexKey, TVertex, TEdge>
@@ -12,20 +12,16 @@ namespace Graphs {
     }
 
     public interface IReadonlyEdgeSet<TVertexKey, TVertex, TEdge>
+        : IReadOnlyCollection<TEdge>
         where TVertex : IVertex
-        where TEdge : class, IReadonlyEdge<TVertex> {
-        int Count
-        { get; }
-
-        bool Contains(TVertex source, TVertex destination);
-    }
+        where TEdge : class, IReadonlyEdge<TVertex> {    }
 
     public interface IMutableEdgeSet<TVertexKey, TVertex, TEdge>
+        : ICollection<TEdge>
         where TVertex : IVertex 
         where TEdge : class, IReadonlyEdge<TVertex> {
-        bool Add(TEdge edge);
-        bool Remove(TEdge edge);
-    }
+            bool Contains(TVertex source, TVertex destination);
+        }
 
     public abstract class EdgeSet<TVertexKey, TVertex, TEdge>
         : IEdgeSet<TVertexKey, TVertex, TEdge>
@@ -33,16 +29,27 @@ namespace Graphs {
         where TEdge : class, IReadonlyEdge<TVertex> {
         public IVertexSet<TVertexKey, TVertex> VertexSet
         { get; }
-        public abstract int Count { get; }
+
+        public abstract int Count 
+        { get; }
+
+        public bool IsReadOnly 
+            => false;
 
         public EdgeSet(IVertexSet<TVertexKey, TVertex> vertexSet) {
             VertexSet = vertexSet;
         }
 
+        public abstract void Add(TEdge item);
+        public abstract void Clear();
+        public abstract bool Contains(TEdge item);
         public abstract bool Contains(TVertex source, TVertex destination);
-        public abstract bool Contains(TEdge edge);
-        public abstract bool Add(TEdge edge);
-        public abstract bool Remove(TEdge edge);
+        public abstract void CopyTo(TEdge[] array, int arrayIndex);
+        public abstract bool Remove(TEdge item);
+        public abstract IEnumerator<TEdge> GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() {
+            return (IEnumerator)GetEnumerator();
+        }
     }
 
     public interface IAdjacencyList<TVertexKey, TVertex, TEdge>
@@ -74,12 +81,35 @@ namespace Graphs {
         }
 
         public override bool Contains(TVertex source, TVertex destination) {
+            if(!m_adjacencyList.ContainsKey(source)) {
+                return false;
+            }
+
             foreach(TEdge edge in m_adjacencyList[source]) {
                 if(edge.Destination.Equals(destination)) {
                     return true;
                 }
             }
             return false;
+        }
+
+        public override void Clear() {
+            m_adjacencyList.Clear();
+        }
+
+        public override void CopyTo(TEdge[] array, int arrayIndex) {
+            int currIndex = arrayIndex + 1;
+            foreach(TEdge edge in this) {
+                array.SetValue(edge, currIndex++);
+            }
+        }
+
+        public override IEnumerator<TEdge> GetEnumerator() {
+            foreach(ICollection<TEdge> edges in m_adjacencyList.Keys) {
+                foreach(TEdge edge in edges) {
+                    yield return edge;
+                }
+            }
         }
 
         protected bool Add(TVertex vertex, TEdge edge) {
