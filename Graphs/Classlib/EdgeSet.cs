@@ -17,14 +17,14 @@ namespace Graphs {
         int Count
         { get; }
 
-        bool Contains(TVertex a, TVertex b);
+        bool Contains(TVertex source, TVertex destination);
     }
 
     public interface IMutableEdgeSet<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex 
         where TEdge : class, IReadonlyEdge<TVertex> {
-        bool AddEdge(TEdge edge);
-        bool RemoveEdge(TEdge edge);
+        bool Add(TEdge edge);
+        bool Remove(TEdge edge);
     }
 
     public abstract class EdgeSet<TVertexKey, TVertex, TEdge>
@@ -41,32 +41,36 @@ namespace Graphs {
 
         public abstract bool Contains(TVertex source, TVertex destination);
         public abstract bool Contains(TEdge edge);
-        public abstract bool AddEdge(TEdge edge);
-        public abstract bool RemoveEdge(TEdge edge);
+        public abstract bool Add(TEdge edge);
+        public abstract bool Remove(TEdge edge);
     }
 
-    public interface IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>
+    public interface IAdjacencyList<TVertexKey, TVertex, TEdge>
         : IEdgeSet<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex
         where TEdge : class, IReadonlyEdge<TVertex> {    }
 
-    public class UndirectedEdgeSet<TVertexKey, TVertex, TEdge>
+    public abstract class AdjacencyList<TVertexKey, TVertex, TEdge>
         : EdgeSet<TVertexKey, TVertex, TEdge>,
-        IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>
+        IAdjacencyList<TVertexKey, TVertex, TEdge>
         where TVertex : IVertex
         where TEdge : class, IReadonlyEdge<TVertex> {
-        private ICollection<TEdge> m_edges;
         // Edges are references as : class per definition of the generic
         private IDictionary<TVertex, ICollection<TEdge>> m_adjacencyList;
 
-        public override int Count
-            => m_edges.Count;
+        public override int Count {
+            get {
+                int _amount = 0;
+                foreach(ICollection<TEdge> edges in m_adjacencyList.Values) {
+                    _amount += edges.Count;
+                }
+                return _amount;
+            }
+        }
 
-        public UndirectedEdgeSet(IVertexSet<TVertexKey, TVertex> vertexSet)
+        public AdjacencyList(IVertexSet<TVertexKey, TVertex> vertexSet)
             : base(vertexSet) {
-            m_edges = new HashSet<TEdge>();
             m_adjacencyList = new Dictionary<TVertex, ICollection<TEdge>>();
-            //TODO: INIT COLLECTIONS
         }
 
         public override bool Contains(TVertex source, TVertex destination) {
@@ -78,11 +82,7 @@ namespace Graphs {
             return false;
         }
 
-        public override bool Contains(TEdge edge) {
-            return m_edges.Contains(edge);
-        }
-
-        public override bool AddEdge(TEdge edge) {
+        protected bool Add(TVertex vertex, TEdge edge) {
             if(!VertexSet.Contains(edge.Source) || !VertexSet.Contains(edge.Destination)) {
                 return false;
             }
@@ -91,27 +91,93 @@ namespace Graphs {
                 return false;
             }
 
-            if(!m_adjacencyList.ContainsKey(edge.Source)) {
-                m_adjacencyList.Add(edge.Source, new List<TEdge>());
+            if(!m_adjacencyList.ContainsKey(vertex)) {
+                m_adjacencyList.Add(vertex, new List<TEdge>());
             }
 
-            if(!m_adjacencyList.ContainsKey(edge.Destination)) {
-                m_adjacencyList.Add(edge.Destination, new List<TEdge>());
-            }
-
-            m_edges.Add(edge);
-            m_adjacencyList[edge.Source].Add(edge);
-            m_adjacencyList[edge.Destination].Add(edge);
+            m_adjacencyList[vertex].Add(edge);
             return true;
         }
 
-        public override bool RemoveEdge(TEdge edge) {
-            if(!Contains(edge.Source, edge.Destination)) {
+        protected bool Remove(TVertex vertex, TEdge edge) {
+            if(!VertexSet.Contains(vertex)) {
                 return false;
             }
-            m_adjacencyList[edge.Source].Remove(edge);
-            m_adjacencyList[edge.Destination].Remove(edge);
-            return true;
+
+            if(!m_adjacencyList.ContainsKey(vertex)) {
+                return false;
+            }
+
+            // Also returns false if item not found. Saves a Contains check
+            return m_adjacencyList[vertex].Remove(edge);
+        }
+    }
+
+    public interface IDirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        : IEdgeSet<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : class, IReadonlyEdge<TVertex> {    }
+
+    public class DirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        : AdjacencyList<TVertexKey, TVertex, TEdge>,
+        IAdjacencyList<TVertexKey, TVertex, TEdge>,
+        IDirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : class, IReadonlyEdge<TVertex> {
+        public DirectedAdjacencyList(IVertexSet<TVertexKey, TVertex> vertexSet)
+            : base(vertexSet) {    }
+
+        public override bool Contains(TEdge edge) {
+            return Contains(edge.Source, edge.Destination);
+        }
+
+        public override bool Add(TEdge edge) {
+            return Add(edge.Source, edge);
+        }
+
+        public override bool Remove(TEdge edge) {
+            return Remove(edge.Source, edge);
+        }
+    }
+
+    public interface IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        : IEdgeSet<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : class, IReadonlyEdge<TVertex> {    }
+
+    public class UndirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        : AdjacencyList<TVertexKey, TVertex, TEdge>,
+        IAdjacencyList<TVertexKey, TVertex, TEdge>,
+        IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>
+        where TVertex : IVertex
+        where TEdge : class, IReadonlyEdge<TVertex> {
+        public UndirectedAdjacencyList(IVertexSet<TVertexKey, TVertex> vertexSet)
+            : base(vertexSet) {    }
+
+        public override bool Contains(TEdge edge) {
+            return Contains(edge.Source, edge.Destination) && Contains(edge.Destination, edge.Source);
+        }
+
+        public override bool Add(TEdge edge) {
+            bool success = base.Add(edge.Source, edge);
+            if(success) {
+                success = Add(edge.Destination, edge);
+                if(!success) {
+                    Remove(edge.Source, edge);
+                }
+            }
+            return success;
+        }
+
+        public override bool Remove(TEdge edge) {
+            bool success = base.Remove(edge.Source, edge);
+            if(success) {
+                success = Remove(edge.Destination, edge);
+                if(!success) {
+                    Add(edge.Source, edge);
+                }
+            }
+            return success;
         }
     }
 }

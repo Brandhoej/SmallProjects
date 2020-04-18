@@ -3,7 +3,7 @@ namespace Graphs {
         : IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         , IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IReadonlyEdge<TVertex>
+        where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IVertexSet<TVertexKey, TVertex>
         where TEdgeSet : IEdgeSet<TVertexKey, TVertex, TEdge> {
         new TVertexSet VertexSet
@@ -15,7 +15,7 @@ namespace Graphs {
 
     public interface IReadonlyGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IReadonlyEdge<TVertex>
+        where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IReadonlyVertexSet<TVertexKey, TVertex>
         where TEdgeSet : IReadonlyEdgeSet<TVertexKey, TVertex, TEdge> {
         IReadonlyVertexSet<TVertexKey, TVertex> VertexSet
@@ -27,7 +27,7 @@ namespace Graphs {
 
     public interface IMutableGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IReadonlyEdge<TVertex>
+        where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IMutableVertexSet<TVertexKey, TVertex>
         where TEdgeSet : IMutableEdgeSet<TVertexKey, TVertex, TEdge> {
         IMutableVertexSet<TVertexKey, TVertex> VertexSet
@@ -40,7 +40,7 @@ namespace Graphs {
     public abstract class Graph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         : IGraph<TVertexKey, TVertex, TEdge, TVertexSet, TEdgeSet>
         where TVertex : IVertex
-        where TEdge : IReadonlyEdge<TVertex>
+        where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IVertexSet<TVertexKey, TVertex>
         where TEdgeSet : IEdgeSet<TVertexKey, TVertex, TEdge>
     {
@@ -69,15 +69,15 @@ namespace Graphs {
     }
 
     public class UndirectedGraph<TVertexSet, TVertexKey, TVertex, TEdgeSet, TEdge>
-        : Graph<TVertexKey, TVertex, TEdge, IVertexSet<TVertexKey, TVertex>, IUndirectedEdgeSet<TVertexKey, TVertex, TEdge>>
+        : Graph<TVertexKey, TVertex, TEdge, IVertexSet<TVertexKey, TVertex>, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>>
         where TVertex : IVertex
-        where TEdge : IReadonlyEdge<TVertex>
+        where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IVertexSet<TVertexKey, TVertex>
-        where TEdgeSet : IUndirectedEdgeSet<TVertexKey, TVertex, TEdge> {
+        where TEdgeSet : IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge> {
         public UndirectedGraph(TVertexSet vertexSet, TEdgeSet edgeSet)
             : base(vertexSet, edgeSet) {    }
 
         public UndirectedGraph(TVertexSet vertexSet)
-            : base(vertexSet, new UndirectedEdgeSet<TVertexKey, TVertex, TEdge>(vertexSet)) {    }
+            : base(vertexSet, new UndirectedAdjacencyList<TVertexKey, TVertex, TEdge>(vertexSet)) {    }
     }
 }
