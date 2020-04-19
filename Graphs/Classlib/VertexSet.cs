@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Graphs {
+namespace Graphs
+{
     public interface IVertexSet<TVertexKey, TVertex>
         : IReadonlyVertexSet<TVertexKey, TVertex>,
         IMutableVertexSet<TVertexKey, TVertex>
@@ -96,6 +96,8 @@ namespace Graphs {
                 m_vertices.Add(value);
             } else if(ContainsKey(key)) {
                 m_vertices[key] = value;
+            } else {
+                throw new IndexOutOfRangeException("Key is not valid");
             }
         }
 
@@ -164,87 +166,127 @@ namespace Graphs {
 
         private TVertex[] m_vertices;
 
-        public int Amount 
+        public IEnumerable<int> Keys
+            => Keys;
+
+        public IEnumerable<TVertex> Values
+            => m_vertices;
+
+        public int Count
             => m_vertices.Length;
 
-        public IEnumerable<int> Keys => throw new NotImplementedException();
+        ICollection<int> IDictionary<int, TVertex>.Keys {
+            get {
+                int[] _keys = new int[Count];
+                for(int _i = 0; _i < Count; _i++) {
+                    _keys[_i] = _i;
+                }
+                return _keys;
+            }
+        }
 
-        public IEnumerable<TVertex> Values => throw new NotImplementedException();
+        ICollection<TVertex> IDictionary<int, TVertex>.Values {
+            get {
+                TVertex[] _values = new TVertex[Count];
+                for(int _i = 0; _i < Count; _i++) {
+                    _values[_i] = m_vertices[_i];
+                }
+                return _values;
+            }
+        }
 
-        public int Count => throw new NotImplementedException();
+        public bool IsReadOnly
+            => false;
 
-        ICollection<int> IDictionary<int, TVertex>.Keys => throw new NotImplementedException();
+        TVertex IDictionary<int, TVertex>.this[int key]
+        {
+            get => this[key];
+            set => this[key] = value;
+        }
 
-        ICollection<TVertex> IDictionary<int, TVertex>.Values => throw new NotImplementedException();
-
-        public bool IsReadOnly => throw new NotImplementedException();
-
-        TVertex IDictionary<int, TVertex>.this[int key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public TVertex this[int key] => throw new NotImplementedException();
+        public TVertex this[int key]
+        {
+            get => m_vertices[key];
+            private set => m_vertices[key] = value;
+        }
 
         public VertexArray(int amount) {
             m_vertices = new TVertex[amount];
         }
 
-        public bool InBounds(int key)
-        {
-            throw new NotImplementedException();
+        public bool InBounds(int key) {
+            return key >= 0 && key < Count;
         }
 
-        public bool ContainsKey(int key)
-        {
-            throw new NotImplementedException();
+        public bool ContainsKey(int key) {
+            return InBounds(key);
         }
 
-        public bool TryGetValue(int key, out TVertex value)
-        {
-            throw new NotImplementedException();
+        public bool TryGetValue(int key, out TVertex value) {
+            bool _found = false;
+            value = null;
+            if(_found = InBounds(key)) {
+                value = this[key];
+            }
+            return _found;
         }
 
-        public void Add(int key, TVertex value)
-        {
-            throw new NotImplementedException();
+        public void Add(int key, TVertex value) {
+            if(InBounds(key)) {
+                this[key] = value;
+            } else {
+                throw new IndexOutOfRangeException("Key is invalid");
+            }
         }
 
-        public bool Remove(int key)
-        {
-            throw new NotImplementedException();
+        public bool Remove(int key) {
+            bool _success = false;
+            if(_success = InBounds(key)) {
+                this[key] = null;
+            }
+            return _success;
         }
 
-        public void Add(KeyValuePair<int, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public void Add(KeyValuePair<int, TVertex> item) {
+            Add(item.Key, item.Value);
         }
 
-        public void Clear()
-        {
-            throw new NotImplementedException();
+        public void Clear() {
+            for(int i = 0; i < Count; i++) {
+                Remove(i);
+            }
         }
 
-        public bool Contains(KeyValuePair<int, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public bool Contains(KeyValuePair<int, TVertex> item) {
+            bool _found = false;
+            if(InBounds(item.Key)) {
+                _found = this[item.Key] == item.Value;
+            }
+            return _found;
         }
 
-        public void CopyTo(KeyValuePair<int, TVertex>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
+        public void CopyTo(KeyValuePair<int, TVertex>[] array, int arrayIndex) {
+            for(int _i = 0; _i < Count; _i++) {
+                array.SetValue(m_vertices[_i], _i + arrayIndex + 1);
+            }
         }
 
-        public bool Remove(KeyValuePair<int, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public bool Remove(KeyValuePair<int, TVertex> item) {
+            bool _success = false;
+            if(_success = Contains(item)) {
+                Remove(item.Key);
+            }
+            return _success;
         }
 
-        public IEnumerator<KeyValuePair<int, TVertex>> GetEnumerator()
-        {
-            throw new NotImplementedException();
+        public IEnumerator<KeyValuePair<int, TVertex>> GetEnumerator() {
+            for(int _i = 0; _i < Count; _i++) {
+                yield return new KeyValuePair<int, TVertex>(_i, m_vertices[_i]);
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 
@@ -264,79 +306,94 @@ namespace Graphs {
         public int Amount 
             => m_vertices.Count;
 
-        public IEnumerable<TVertexKey> Keys => throw new NotImplementedException();
+        public IEnumerable<TVertexKey> Keys
+            => m_vertices.Keys;
 
-        public IEnumerable<TVertex> Values => throw new NotImplementedException();
+        public IEnumerable<TVertex> Values
+            => m_vertices.Values;
 
-        public int Count => throw new NotImplementedException();
+        public int Count
+            => m_vertices.Count;
 
-        ICollection<TVertexKey> IDictionary<TVertexKey, TVertex>.Keys => throw new NotImplementedException();
+        ICollection<TVertexKey> IDictionary<TVertexKey, TVertex>.Keys
+            => m_vertices.Keys;
 
-        ICollection<TVertex> IDictionary<TVertexKey, TVertex>.Values => throw new NotImplementedException();
+        ICollection<TVertex> IDictionary<TVertexKey, TVertex>.Values
+            => m_vertices.Values;
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly
+            => false;
 
-        TVertex IDictionary<TVertexKey, TVertex>.this[TVertexKey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        TVertex IDictionary<TVertexKey, TVertex>.this[TVertexKey key] {
+            get => this[key];
+            set => this[key] = value;
+        }
 
-        public TVertex this[TVertexKey key] => throw new NotImplementedException();
+        public TVertex this[TVertexKey key] {
+            get => m_vertices[key];
+            private set => m_vertices[key] = value;
+        }
 
         public VertexDictionary() {
             m_vertices = new Dictionary<TVertexKey, TVertex>();
         }
 
-        public bool ContainsKey(TVertexKey key)
-        {
-            throw new NotImplementedException();
+        public bool ContainsKey(TVertexKey key) {
+            return m_vertices.ContainsKey(key);
         }
 
-        public bool TryGetValue(TVertexKey key, out TVertex value)
-        {
-            throw new NotImplementedException();
+        public bool TryGetValue(TVertexKey key, out TVertex value) {
+            return m_vertices.TryGetValue(key, out value);
         }
 
-        public void Add(TVertexKey key, TVertex value)
-        {
-            throw new NotImplementedException();
+        public void Add(TVertexKey key, TVertex value) {
+            m_vertices.Add(key, value);
         }
 
-        public bool Remove(TVertexKey key)
-        {
-            throw new NotImplementedException();
+        public bool Remove(TVertexKey key) {
+            return m_vertices.Remove(key);
         }
 
-        public void Add(KeyValuePair<TVertexKey, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public void Add(KeyValuePair<TVertexKey, TVertex> item) {
+            Add(item.Key, item.Value);
         }
 
-        public void Clear()
-        {
-            throw new NotImplementedException();
+        public void Clear() {
+            m_vertices.Clear();
         }
 
-        public bool Contains(KeyValuePair<TVertexKey, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public bool Contains(KeyValuePair<TVertexKey, TVertex> item) {
+            bool _found = false;
+            if(m_vertices.ContainsKey(item.Key)) {
+                _found = m_vertices[item.Key] == item.Value;
+            }
+            return _found;
         }
 
-        public void CopyTo(KeyValuePair<TVertexKey, TVertex>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
+        public void CopyTo(KeyValuePair<TVertexKey, TVertex>[] array, int arrayIndex) {
+            int _i = 0;
+            foreach(KeyValuePair<TVertexKey, TVertex> pair in m_vertices) {
+                array.SetValue(pair, _i + arrayIndex + 1);
+                _i++;
+            }
         }
 
-        public bool Remove(KeyValuePair<TVertexKey, TVertex> item)
-        {
-            throw new NotImplementedException();
+        public bool Remove(KeyValuePair<TVertexKey, TVertex> item) {
+            bool _success = false;
+            if(ContainsKey(item.Key) && m_vertices[item.Key] == item.Value) {
+                _success = Remove(item.Key);
+            }
+            return _success;
         }
 
-        public IEnumerator<KeyValuePair<TVertexKey, TVertex>> GetEnumerator()
-        {
-            throw new NotImplementedException();
+        public IEnumerator<KeyValuePair<TVertexKey, TVertex>> GetEnumerator() {
+            foreach(KeyValuePair<TVertexKey, TVertex> pair in m_vertices) {
+                yield return pair;
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }
