@@ -16,17 +16,25 @@ namespace Tests {
             Vertex v1 = new Vertex();
             vl.Add(0, v0);
             vl.Add(1, v1);
+
+            foreach(KeyValuePair<int, Vertex> pair in vl) {
+                Assert.IsNotNull(pair);
+                Assert.IsNotNull(pair.Value);
+            }
+
             Assert.AreEqual(vl.Count, 2);
             Assert.IsTrue(vl.ContainsKey(0));
             Assert.IsTrue(vl.ContainsKey(1));
             Assert.IsTrue(vl.Contains(new KeyValuePair<int, Vertex>(0, v0)));
             Assert.IsTrue(vl.Contains(new KeyValuePair<int, Vertex>(1, v1)));
+
             Vertex re = null;
             Assert.IsTrue(vl.TryGetValue(0, out re));
             Assert.AreEqual(re, v0);
             re = null;
             Assert.IsFalse(vl.TryGetValue(2, out re));
             Assert.IsNull(re);
+
             Assert.IsTrue(vl.Remove(new KeyValuePair<int, Vertex>(0, v0)));
             Assert.IsTrue(vl.ContainsKey(0));
             Assert.IsFalse(vl.ContainsKey(1));
@@ -37,33 +45,102 @@ namespace Tests {
 
         [TestMethod]
         public void TestVertexArray() {
-            // VertexArray<Vertex> va = new VertexArray<Vertex>(2);
-            // Assert.IsFalse(va.Contains(0));
-            // Assert.IsFalse(va.Contains(1));
-            // Vertex v1 = new Vertex();
-            // Vertex v2 = new Vertex();
-            // Assert.IsTrue(va.Add(0, v1));
-            // Assert.IsTrue(va.Add(1, v2));
-            // Assert.IsTrue(va.Contains(0));
-            // Assert.IsTrue(va.Contains(1));
-            // Assert.AreEqual(va.GetVertex(0), v1);
-            // Assert.AreNotEqual(va.GetVertex(1), v1);
-            // Assert.AreEqual(va.GetVertex(1), v2);
-            // Assert.AreNotEqual(va.GetVertex(0), v2);
-            // Assert.IsTrue(va.Remove(0));
-            // Assert.IsFalse(va.Remove(0));
-            // Assert.IsTrue(va.Remove(1));
-            // Assert.IsFalse(va.Remove(1));
+            VertexArray<Vertex> va = new VertexArray<Vertex>(2);
+            Assert.AreEqual(va.Count, 2);
+            Assert.IsNull(va[0]);
+            Assert.IsNull(va[1]);
+            Vertex v0 = new Vertex();
+            Vertex v1 = new Vertex();
+            va.Add(0, v0);
+            va.Add(1, v1);
+
+            foreach(KeyValuePair<int, Vertex> pair in va) {
+                Assert.AreNotEqual(pair, null);
+                Assert.AreNotEqual(pair.Value, null);
+            }
+
+            Assert.AreEqual(va.Count, 2);
+            Assert.IsTrue(va.ContainsKey(0));
+            Assert.IsTrue(va.ContainsKey(1));
+            Assert.IsTrue(va.Contains(new KeyValuePair<int, Vertex>(0, v0)));
+            Assert.IsTrue(va.Contains(new KeyValuePair<int, Vertex>(1, v1)));
+
+            Vertex re = null;
+            Assert.IsTrue(va.TryGetValue(0, out re));
+            Assert.AreEqual(re, v0);
+            re = null;
+            Assert.IsFalse(va.TryGetValue(2, out re));
+            Assert.IsNull(re);
+
+            Assert.IsTrue(va.Remove(new KeyValuePair<int, Vertex>(0, v0)));
+            Assert.IsTrue(va.ContainsKey(0));
+            Assert.IsTrue(va.ContainsKey(1));
+            Assert.IsNull(va[0]);
+            Assert.IsNotNull(va[1]);
+            Assert.AreEqual(va[1], v1);
+            Assert.IsTrue(va.Remove(1));
+            Assert.IsNull(va[1]);
+            Assert.AreEqual(va.Count, 2);
         }
 
         [TestMethod]
         public void TestVertexDictionary() {
+            VertexDictionary<int, Vertex> vd = new VertexDictionary<int, Vertex>();
+            Assert.AreEqual(vd.Count, 0);
+            Vertex v0 = new Vertex();
+            Vertex v1 = new Vertex();
+            vd.Add(0, v0);
+            vd.Add(1, v1);
 
+            foreach(KeyValuePair<int, Vertex> pair in vd) {
+                Assert.IsNotNull(pair);
+                Assert.IsNotNull(pair.Value);
+            }
+
+            Assert.AreEqual(vd.Count, 2);
+            Assert.IsTrue(vd.ContainsKey(0));
+            Assert.IsTrue(vd.ContainsKey(1));
+            Assert.IsTrue(vd.Contains(new KeyValuePair<int, Vertex>(0, v0)));
+            Assert.IsTrue(vd.Contains(new KeyValuePair<int, Vertex>(1, v1)));
+
+            Vertex re = null;
+            Assert.IsTrue(vd.TryGetValue(0, out re));
+            Assert.AreEqual(re, v0);
+            re = null;
+            Assert.IsFalse(vd.TryGetValue(2, out re));
+            Assert.IsNull(re);
+
+            Assert.IsTrue(vd.Remove(new KeyValuePair<int, Vertex>(0, v0)));
+            Assert.IsFalse(vd.Remove(0));
+            Assert.AreEqual(vd.Count, 1);
+            Assert.IsFalse(vd.ContainsKey(0));
+            Assert.IsTrue(vd.ContainsKey(1));
+            Assert.AreEqual(vd[1], v1);
         }
 
         [TestMethod]
-        public void TestDirectedSparseGraph() {
+        public void TestUndirectedGraph() {
+            IVertexList<Vertex> vertices = new VertexList<Vertex>();
+            IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>> edges = new UndirectedAdjacencyList<int, Vertex, Edge<Vertex>>();
+            IUndirectedGraph<IVertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>> graph = new UndirectedGraph<IVertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>(vertices, edges);
+            Assert.IsNotNull(graph.EdgeSet);
+            Assert.IsNotNull(graph.VertexSet);
+            Assert.IsNotNull(((IMutableGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).EdgeSet);
+            Assert.IsNotNull(((IMutableGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).VertexSet);
+            Assert.IsNotNull(((IReadonlyGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).EdgeSet);
+            Assert.IsNotNull(((IReadonlyGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).VertexSet);
+        }
 
+        [TestMethod]
+        public void TestUndirectedSparseGraph() {
+            IVertexList<IVertex> vertices = new VertexList<Vertex>();
+            IUndirectedSparseGraph<IVertexList<IVertex>, int, IVertex, IEdge<IVertex>> graph = new UndirectedSparseGraph<IVertexList<IVertex>, int, IVertex, IEdge<IVertex>>(vertices);
+            Assert.IsNotNull(graph.EdgeSet);
+            Assert.IsNotNull(graph.VertexSet);
+            Assert.IsNotNull(((IMutableGraph<IVertexList<IVertex>, int, IVertex, IUndirectedAdjacencyList<int, IVertex, IEdge<Vertex>>, IEdge<Vertex>>)graph).EdgeSet);
+            Assert.IsNotNull(((IMutableGraph<IVertexList<IVertex>, int, IVertex, IUndirectedAdjacencyList<int, IVertex, IEdge<Vertex>>, IEdge<Vertex>>)graph).VertexSet);
+            Assert.IsNotNull(((IReadonlyGraph<IVertexList<IVertex>, int, IVertex, IUndirectedAdjacencyList<int, IVertex, IEdge<Vertex>>, IEdge<Vertex>>)graph).EdgeSet);
+            Assert.IsNotNull(((IReadonlyGraph<IVertexList<IVertex>, int, IVertex, IUndirectedAdjacencyList<int, IVertex, IEdge<Vertex>>, IEdge<Vertex>>)graph).VertexSet);
         }
 
         [TestMethod]
@@ -76,30 +153,6 @@ namespace Tests {
             // Assert.IsNotNull(((IMutableGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).VertexSet);
             // Assert.IsNotNull(((IReadonlyGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).EdgeSet);
             // Assert.IsNotNull(((IReadonlyGraph<VertexList<Vertex>, int, Vertex, IUndirectedAdjacencyList<int, Vertex, Edge<Vertex>>, Edge<Vertex>>)graph).VertexSet);
-        }
-
-        [TestMethod]
-        public void TestUndirectedSparseGraph() {
-            // VertexList<Vertex> vertices = new VertexList<Vertex>();
-            // Vertex va = new Vertex();
-            // Vertex vb = new Vertex();
-            // Assert.AreNotEqual(va, vb);
-            // vertices.Add(0, va);
-            // vertices.Add(1, vb);
-
-            // Assert.AreEqual(2, vertices.Count);
-
-            // UndirectedAdjacencyList<int, Vertex, Edge<Vertex>> adjList = new UndirectedAdjacencyList<int, Vertex, Edge<Vertex>>();
-            // Edge<Vertex> edge = new Edge<Vertex>(va, vb);
-            // bool added = adjList.Add(edge);
-            // Assert.AreEqual(adjList.Count, 2);
-            // Assert.AreEqual(adjList.GetEdges(va).Count, 1);
-            // Assert.AreEqual(adjList.GetEdges(vb).Count, 1);
-            // Assert.AreEqual(adjList.GetEdges(va).First(), edge);
-
-            // UndirectedSparseGraph<IVertexList<Vertex>, int, Vertex, Edge<Vertex>> graph = new Graphs.UndirectedSparseGraph<IVertexList<Vertex>, int, Vertex, Edge<Vertex>>(vertices, adjList);
-            // Assert.AreEqual(graph.VertexSet, vertices);
-            // Assert.AreEqual(graph.EdgeSet, adjList);
         }
     }
 }

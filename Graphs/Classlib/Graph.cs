@@ -114,13 +114,22 @@ namespace Graphs {
             : base(vertexSet, edgeSet) {    }
     }
 
+    public interface IUndirectedSparseGraph<TVertexSet, TVertexKey, TVertex, TEdge>
+        : IUndirectedGraph<TVertexSet, TVertexKey, TVertex, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>, TEdge>
+        where TVertex : class, IVertex
+        where TEdge : class, IReadonlyEdge<TVertex>
+        where TVertexSet : IVertexSet<TVertexKey, TVertex> {    }
+
     public class UndirectedSparseGraph<TVertexSet, TVertexKey, TVertex, TEdge>
         : UndirectedGraph<TVertexSet, TVertexKey, TVertex, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>, TEdge>,
-        IUndirectedGraph<TVertexSet, TVertexKey, TVertex, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge>, TEdge>
+        IUndirectedSparseGraph<TVertexSet, TVertexKey, TVertex, TEdge>
         where TVertex : class, IVertex
         where TEdge : class, IReadonlyEdge<TVertex>
         where TVertexSet : IVertexSet<TVertexKey, TVertex> {
-        public UndirectedSparseGraph(TVertexSet vertexSet, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge> edgeSet) 
+        public UndirectedSparseGraph(TVertexSet vertexSet, IUndirectedAdjacencyList<TVertexKey, TVertex, TEdge> edgeSet)
             : base(vertexSet, edgeSet) {    }
+
+        public UndirectedSparseGraph(TVertexSet vertexSet)
+            : base(vertexSet, new UndirectedAdjacencyList<TVertexKey, TVertex, TEdge>()) {    }
     }
 }
