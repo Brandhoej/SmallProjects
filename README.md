@@ -12,7 +12,7 @@ Pending: Write raw binary in sequence, binary string ("0b00100100", "0x24" -> '$
 Reads a file with soccet match information and creates a hashtable with each team and their stats. Collision are handled by chaining and the table strictly uses void pointers ro generalise.
 
 ## SudokuSolver (Javascript)
-Personal exploration of recursive sudoku solving using backtracking, bottom-up, top-down.
+Personal exploration of recursive sudoku solving using backtracking, bottom-up*, top-down*.
 
 ## Yatzy (C)
 A simple Yatzy game simulation where the amount of rolls can be altered by input and the amount of sides on a die can be altered.
